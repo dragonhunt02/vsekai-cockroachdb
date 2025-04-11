@@ -19,7 +19,7 @@ jobs:
           GIT_SHA=865aff1595e494c2ce95030c7a2f20c4370b5ff8
           sudo apt update -y
           sudo apt install -y tree
-          echo "::group::Building CockroachDB for Linux"
+          echo "Building CockroachDB for Linux"
           curl -sS https://buildomat.eng.oxide.computer/public/file/oxidecomputer/cockroach/linux-amd64/$GIT_SHA/cockroach.tgz
           tar -xvzf cockroach.tgz
           tree -a
