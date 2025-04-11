@@ -1,0 +1,29 @@
+name: Cross-Platform Build
+
+on:
+  push
+   # branches:
+      #- main
+
+jobs:
+  build-cross-platform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+          cache: true
+
+      - name: Build Linux binary
+        run: |
+          GIT_SHA=865aff1595e494c2ce95030c7a2f20c4370b5ff8
+          sudo apt update -y
+          echo "::group::Building CockroachDB for Linux"
+          curl https://buildomat.eng.oxide.computer/public/file/oxidecomputer/cockroach/linux-amd64/$GIT_SHA/cockroach.tgz
+          ls -a
