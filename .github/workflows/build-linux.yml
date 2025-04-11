@@ -48,6 +48,10 @@ jobs:
             echo "Trying dev build..."
             make dev
           fi
+          cp -v ./cockroach-linux-2.6.32-gnu-amd64 build/deploy/cockroach
+          cp -v ./lib.docker_amd64/libgeos_c.so ./lib.docker_amd64/libgeos.so build/deploy/
+          cp -v -r licenses build/deploy/
+          #cd build/deploy && docker build -t cockroachdb/cockroach .
           
           echo "::endgroup::"
       - name: Verify Linux build output
