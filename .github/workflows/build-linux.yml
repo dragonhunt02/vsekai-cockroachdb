@@ -1,0 +1,94 @@
+name: Cross-Platform Build
+
+on:
+  push
+   # branches:
+      #- main
+
+jobs:
+  build-cross-platform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+          cache: true
+
+      - name: Install cross-compilation tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-mingw-w64 g++-mingw-w64 ccache build-essential
+      - name: Build Linux binary
+        run: |
+          echo "::group::Building CockroachDB for Linux"
+          
+          # Set environment variables
+          export GOOS=linux
+          export GOARCH=amd64
+          export CGO_ENABLED=1
+          export PATH=$PWD/bin:$PATH
+          
+          # Try specific targets
+          make build buildoss buildshort
+          
+          # If the above doesn't work, try more specific target
+          if [ ! -f "./cockroach" ] && [ ! -f "./bin/cockroach" ]; then
+            echo "Trying specific build target..."
+            make bin/cockroach
+          fi
+          
+          # If still not working, try with explicit dev build
+          if [ ! -f "./cockroach" ] && [ ! -f "./bin/cockroach" ]; then
+            echo "Trying dev build..."
+            make dev
+          fi
+          
+          echo "::endgroup::"
+      - name: Verify Linux build output
+        run: |
+          # Check for binary in several possible locations
+          if [ -f "./cockroach" ]; then
+            echo "Found cockroach in root directory"
+            mkdir -p bin/linux
+            cp ./cockroach ./bin/linux/
+          elif [ -f "./bin/cockroach" ]; then
+            echo "Found cockroach in bin directory"
+            mkdir -p bin/linux
+            cp ./bin/cockroach ./bin/linux/
+          else
+            echo "Finding binary..."
+            find . -name "cockroach"
+            echo "Linux binary not found at expected location"
+            exit 1
+          fi
+      - name: Run Linux binary tests
+        run: |
+          echo "::group::Testing Linux binary"
+          if [ -f "./bin/linux/cockroach" ]; then
+            ./bin/linux/cockroach version
+          elif [ -f "./bin/cockroach" ]; then
+            ./bin/cockroach version
+          elif [ -f "./cockroach" ]; then
+            ./cockroach version
+          else
+            echo "Linux binary not found for testing"
+            exit 1
+          fi
+          echo "::endgroup::"
+        
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        if: github.ref == 'refs/heads/main'
+        with:
+          name: cockroachdb-linux
+          path: |
+            bin/linux/cockroach
+            LICENSE
+            README.md
+          if-no-files-found: warn
