@@ -20,6 +20,6 @@ jobs:
           sudo apt update -y
           sudo apt install -y tree
           echo "Building CockroachDB for Linux"
-          curl -sS https://buildomat.eng.oxide.computer/public/file/oxidecomputer/cockroach/linux-amd64/$GIT_SHA/cockroach.tgz
+          curl -sS -O https://buildomat.eng.oxide.computer/public/file/oxidecomputer/cockroach/linux-amd64/$GIT_SHA/cockroach.tgz
           tar -xvzf cockroach.tgz
           tree -a
