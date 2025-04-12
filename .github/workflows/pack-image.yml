@@ -1,12 +1,13 @@
-name: Cross-Platform Build
+name: Build CockroachDB Docker image
 
 on:
-  push
-   # branches:
-      #- main
+  push:
+    branches:
+      - release-22.1-oxide
+  workflow_dispatch:  # Trigger on manual dispatch from Actions Tab 
 
 jobs:
-  build-cross-platform:
+  build-docker-image:
     runs-on: ubuntu-latest
     
     steps:
@@ -18,7 +19,7 @@ jobs:
       - name: Docker Setup Buildx
         uses: docker/setup-buildx-action@v3.10.0
 
-      - name: Build Linux binary
+      - name: Build Docker Linux image
         id: build
         run: |
           GIT_SHA=865aff1595e494c2ce95030c7a2f20c4370b5ff8
@@ -56,6 +57,7 @@ jobs:
           release_name: CockroachDB docker image tar
           body: |
             **CockroachDB** image generated from ${{ steps.build.outputs.BUILD_URL }}
+
             You can load it with ```docker import cockroachdb.tar cockroach```
           draft: false
           prerelease: false
