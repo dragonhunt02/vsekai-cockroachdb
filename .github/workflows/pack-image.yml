@@ -14,17 +14,8 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Install Docker Buildx
-        run: |
-          mkdir -p ~/.docker/cli-plugins/
-          curl -sSL https://github.com/docker/buildx/releases/latest/download/buildx-linux-amd64 -o ~/.docker/cli-plugins/docker-buildx
-          chmod +x ~/.docker/cli-plugins/docker-buildx
-          docker buildx version
-
-      - name: Set up Buildx
-        run: |
-          docker buildx create --use --name default-builder
-          docker buildx inspect --bootstrap
+      - name: Docker Setup Buildx
+        uses: docker/setup-buildx-action@v3.10.0
 
       - name: Build Linux binary
         run: |
