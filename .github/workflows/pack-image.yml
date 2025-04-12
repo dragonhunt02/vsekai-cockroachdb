@@ -37,4 +37,5 @@ jobs:
                 --platform linux/amd64 \
                 --progress plain \
                 --tag "v-sekai/cockroach" .
-          
+          # import with 'docker import cockroachdb.tar cockroach'
+          docker import cockroachdb.tar cockroach
