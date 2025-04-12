@@ -55,7 +55,7 @@ jobs:
           tag_name: cockroach-${{ github.run_number }}
           release_name: CockroachDB docker image tar
           body: |
-            ### CockroachDB image generated from ${{ steps.build.outputs.BUILD_URL }}
+            **CockroachDB** image generated from ${{ steps.build.outputs.BUILD_URL }}
             You can load it with ```docker import cockroachdb.tar cockroach```
           draft: false
           prerelease: false
@@ -66,7 +66,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./cockroachdb.tar
+          asset_path: ./build/deploy/cockroachdb.tar
           asset_name: cockroachdb.tar
           asset_content_type: application/x-tar
 
