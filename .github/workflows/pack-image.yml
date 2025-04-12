@@ -22,4 +22,16 @@ jobs:
           echo "Building CockroachDB for Linux"
           curl -sS -O https://buildomat.eng.oxide.computer/public/file/oxidecomputer/cockroach/linux-amd64/$GIT_SHA/cockroach.tgz
           tar -xvzf cockroach.tgz
-          tree -a
+          tree -a cockroach
+
+          cp ./cockroach/cockroach build/deploy/cockroach
+          cp ./cockroach/lib/* build/deploy/
+          cp -r licenses build/deploy/
+
+          cd build/deploy
+          docker buildx build \
+                --output type=docker,dest=./cockroachdb.tar \
+                --platform linux/amd64 \
+                --progress plain \
+                --tag "v-sekai/cockroach"
+          
