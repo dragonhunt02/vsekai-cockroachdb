@@ -33,5 +33,5 @@ jobs:
                 --output type=docker,dest=./cockroachdb.tar \
                 --platform linux/amd64 \
                 --progress plain \
-                --tag "v-sekai/cockroach"
+                --tag "v-sekai/cockroach" .
           
