@@ -1,4 +1,7 @@
-FROM registry.access.redhat.com/ubi10-beta/ubi-minimal
+FROM registry.access.redhat.com/ubi10-beta/ubi
+# ubi10 is required because oxide-computer builds require glibc 2.35 minimum
+# Replace with line below when ubi10 minimal exits beta
+# FROM registry.access.redhat.com/ubi10/ubi-minimal
 
 # For deployment, we need the following additionally installed:
 # tzdata - for time zone functions; reinstalled to replace the missing
