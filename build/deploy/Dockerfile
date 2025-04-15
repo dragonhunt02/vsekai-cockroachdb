@@ -1,6 +1,6 @@
 FROM registry.access.redhat.com/ubi10-beta/ubi
+RUN dnf update -y && dnf install -y util-linux && dnf clean all
 RUN hostname
-#RUN dnf update -y && dnf install -y microdnf && dnf clean all
 # ubi10 is required because oxide-computer builds require glibc 2.35 minimum
 # Replace with this single line below when ubi10 minimal exits beta
 # FROM registry.access.redhat.com/ubi10/ubi-minimal
