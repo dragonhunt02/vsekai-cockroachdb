@@ -1,9 +1,7 @@
-#FROM registry.access.redhat.com/ubi10-beta/ubi
 FROM fedora:41
 RUN dnf update -y && dnf install -y tar gzip xz tzdata hostname && dnf clean all
-RUN hostname
 # ubi10 is required because oxide-computer builds require glibc 2.35 minimum
-# Replace with this single line below when ubi10 minimal exits beta
+# Replace with line below when ubi10 minimal exits beta and uncomment microdnf commands
 # FROM registry.access.redhat.com/ubi10/ubi-minimal
 
 # For deployment, we need the following additionally installed:
