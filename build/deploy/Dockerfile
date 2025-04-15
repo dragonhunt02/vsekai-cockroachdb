@@ -1,4 +1,5 @@
 FROM registry.access.redhat.com/ubi10-beta/ubi
+RUN hostname
 #RUN dnf update -y && dnf install -y microdnf && dnf clean all
 # ubi10 is required because oxide-computer builds require glibc 2.35 minimum
 # Replace with this single line below when ubi10 minimal exits beta
@@ -9,10 +10,10 @@ FROM registry.access.redhat.com/ubi10-beta/ubi
 #          files in /usr/share/zoneinfo/
 # hostname - used in cockroach k8s manifests
 # tar - used by kubectl cp
-RUN dnf update -y \
-    && rpm --erase --nodeps tzdata \
-    && dnf install tzdata hostname tar gzip xz -y \
-    && rm -rf /var/cache/yum
+#RUN microdnf update -y \
+#    && rpm --erase --nodeps tzdata \
+#    && microdnf install tzdata hostname tar gzip xz -y \
+#    && rm -rf /var/cache/yum
 
 RUN mkdir /usr/local/lib/cockroach /cockroach /licenses /docker-entrypoint-initdb.d
 COPY cockroach.sh cockroach /cockroach/
