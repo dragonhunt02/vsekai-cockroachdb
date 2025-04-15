@@ -58,7 +58,8 @@ jobs:
           body: |
             **CockroachDB** image generated from ${{ steps.build.outputs.BUILD_URL }}
 
-            You can load it with ```docker load -i cockroachdb.tar```
+            You can load it in local registry with ```docker load -i cockroachdb.tar```
+            To deploy the loaded image, edit docker compose to use `v-sekai/cockroach`
           draft: false
           prerelease: false
           
