@@ -1,0 +1,29 @@
+name: "edit"
+
+on:
+  push:
+    branches: [xr]
+permissions:
+  contents: write
+jobs:
+  edit:
+    name: edit
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: build-fix
+          fetch-depth: 0
+
+      - name: inspect builder
+        run: |
+          git config --global user.email "jackhunt43@libero.it"
+          git config --global user.name "dragonhunt02"
+
+          #alias rmm='git restore -s main'
+          #rm .github/workflows/edit.yaml
+          #chmod +x plugins/proxy/command-functions 
+          git reset --soft HEAD~15
+          git add -A
+          git commit -a -m "Fix docker image glibc errors"
+          git push -f
