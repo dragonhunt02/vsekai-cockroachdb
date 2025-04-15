@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/ubi-minimal
+FROM registry.access.redhat.com/ubi10/ubi-minimal
 
 # For deployment, we need the following additionally installed:
 # tzdata - for time zone functions; reinstalled to replace the missing
