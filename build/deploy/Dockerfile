@@ -1,6 +1,7 @@
 FROM registry.access.redhat.com/ubi10-beta/ubi
+RUN dnf install -y microdnf
 # ubi10 is required because oxide-computer builds require glibc 2.35 minimum
-# Replace with line below when ubi10 minimal exits beta
+# Replace with this single line below when ubi10 minimal exits beta
 # FROM registry.access.redhat.com/ubi10/ubi-minimal
 
 # For deployment, we need the following additionally installed:
