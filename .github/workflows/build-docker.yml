@@ -37,13 +37,13 @@ jobs:
 
           cd build/deploy
           docker buildx build \
-                --output type=docker,dest=./cockroachdb.tar \
+                --load \
                 --platform linux/amd64 \
                 --progress plain \
                 --tag "v-sekai/cockroach" .
 
-          # Import in local registry
-          docker import cockroachdb.tar cockroach
+          # Export from local registry
+          docker save -o cockroachdb.tar v-sekai/cockroach
 
           echo "BUILD_URL=$BUILD_URL" >> $GITHUB_OUTPUT
 
@@ -58,7 +58,8 @@ jobs:
           body: |
             **CockroachDB** image generated from ${{ steps.build.outputs.BUILD_URL }}
 
-            You can load it with ```docker import cockroachdb.tar cockroach```
+            You can load it in local registry with ```docker load -i cockroachdb.tar```
+            To deploy the loaded image, edit docker compose to use `v-sekai/cockroach`
           draft: false
           prerelease: false
           
