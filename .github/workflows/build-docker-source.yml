@@ -1,9 +1,9 @@
 name: Build source CockroachDB Docker image
 
 on:
-  #push:
-  #  branches:
-  #    - release-22.1-oxide
+  push:
+    branches:
+      - master
   workflow_dispatch:  # Trigger on manual dispatch from Actions Tab 
 
 jobs:
