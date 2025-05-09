@@ -68,7 +68,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: .cockroachdb.tgz
+          asset_path: ./cockroachdb.tgz
           asset_name: cockroachdb.tgz
           asset_content_type: application/gzip
 
