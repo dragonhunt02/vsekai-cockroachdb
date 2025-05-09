@@ -10,10 +10,11 @@ RUN mkdir -p /work
 
 WORKDIR /app/cockroach
 
-RUN bash .github/buildomat/jobs/build-linux.sh
-RUN tree build/deploy
+#RUN bash .github/buildomat/jobs/build-linux.sh
+RUN curl -OL https://github.com/dragonhunt02/vsekai-cockroachdb/releases/download/cockroach-33/cockroach.tgz
+#RUN tree build/deploy
 RUN ls -a .
-RUN tree -a .
+#RUN tree -a .
 RUN tar -xvzf cockroach.tgz
 #RUN tree cockroach
 
@@ -35,7 +36,7 @@ RUN dnf update -y && dnf install -y tar gzip xz tzdata hostname && dnf clean all
 
 RUN mkdir /usr/local/lib/cockroach /cockroach /licenses /docker-entrypoint-initdb.d
 
-COPY --from=builder /app/cockroach/cockroach .
+#COPY --from=builder /app/cockroach/cockroach .
 COPY --from=builder /app/cockroach/licenses/* /licenses/
 
 # Install GEOS libraries libgeos.so libgeos_c.so
