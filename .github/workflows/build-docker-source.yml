@@ -1,4 +1,4 @@
-name: Build CockroachDB Docker image
+name: Build source CockroachDB Docker image
 
 on:
   #push:
