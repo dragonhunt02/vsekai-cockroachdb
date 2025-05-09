@@ -12,7 +12,8 @@ WORKDIR /app/cockroach
 
 RUN bash .github/buildomat/jobs/build-linux.sh
 RUN tree build/deploy
-RUN tree cockroach
+RUN ls -a .
+RUN tree -a .
 RUN tar -xvzf cockroach.tgz
 #RUN tree cockroach
 
