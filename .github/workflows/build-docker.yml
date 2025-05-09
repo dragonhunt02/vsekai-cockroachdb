@@ -25,15 +25,15 @@ jobs:
           GIT_SHA=865aff1595e494c2ce95030c7a2f20c4370b5ff8
           BUILD_URL=https://buildomat.eng.oxide.computer/public/file/oxidecomputer/cockroach/linux-amd64/$GIT_SHA/cockroach.tgz
 
-          sudo find . -type f -name "cockroach.tgz" 2>/dev/null || true
+          find . -type f -name "cockroach.tgz" 2>/dev/null || true
           echo "Building CockroachDB Docker image..."
           sudo mkdir /work
           sudo chown $(whoami) /work
           #bash .github/buildomat/jobs/build-linux.sh        
           strace -f -e execve -o exec_trace.log .github/buildomat/jobs/build-linux.sh
           cat exec_trace.log
-          sudo find . -type f -name "cockroach.tgz" 2>/dev/null || true
-          sudo find / -type f -name "cockroach.tgz" 2>/dev/null || true
+          find . -type f -name "cockroach.tgz" 2>/dev/null || true
+          find / -type f -name "cockroach.tgz" 2>/dev/null || true
           exit 1
 
       - name: Create Release
