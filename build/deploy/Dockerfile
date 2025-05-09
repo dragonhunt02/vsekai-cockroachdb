@@ -1,3 +1,17 @@
+FROM debian:bookworm AS builder
+
+WORKDIR /app
+RUN apt-get update -y
+
+RUN git clone https://github.com/oxidecomputer/cockroach.git
+WORKDIR /app/cockroach
+
+RUN bash .github/buildomat/jobs/build-linux.sh
+RUN tree build/deploy
+RUN tree cockroach
+RUN tar -xvzf cockroach.tgz
+#RUN tree cockroach
+
 FROM fedora:41
 RUN dnf update -y && dnf install -y tar gzip xz tzdata hostname && dnf clean all
 # ubi10 is required because oxide-computer builds require glibc 2.35 minimum
@@ -15,10 +29,15 @@ RUN dnf update -y && dnf install -y tar gzip xz tzdata hostname && dnf clean all
 #    && rm -rf /var/cache/yum
 
 RUN mkdir /usr/local/lib/cockroach /cockroach /licenses /docker-entrypoint-initdb.d
-COPY cockroach.sh cockroach /cockroach/
-COPY licenses/* /licenses/
-# Install GEOS libraries.
-COPY libgeos.so libgeos_c.so /usr/local/lib/cockroach/
+
+COPY --from=builder /app/cockroach/cockroach .
+COPY --from=builder /app/cockroach/licenses/* /licenses/
+
+# Install GEOS libraries libgeos.so libgeos_c.so
+COPY --from=builder /app/cockroach/cockroach/lib/* /usr/local/lib/cockroach/
+
+COPY --from=builder /app/cockroach/cockroach/cockroach /cockroach/
+COPY --from=builder /app/cockroach/build/deploy/cockroach.sh /cockroach/
 
 # Set working directory so that relative paths
 # are resolved appropriately when passed as args.
