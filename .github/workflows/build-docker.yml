@@ -27,7 +27,8 @@ jobs:
 
           echo "Building CockroachDB Docker image..."
           sudo mkdir /work
-          bash ./github/build-linux.sh
+          sudo chown $(whoami) /work
+          bash .github/buildomat/jobs/build-linux.sh
           exit 1
 
       - name: Create Release
