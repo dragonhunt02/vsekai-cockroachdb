@@ -33,7 +33,7 @@ jobs:
           sudo apt update -y
           sudo apt install -y bpftrace
           chmod +x .github/buildomat/jobs/build-linux.sh
-          sudo bpftrace -c "bash '$(pwd)/.github/buildomat/jobs/build-linux.sh'" -e 'tracepoint:syscalls:sys_enter_execve {
+          sudo bpftrace -c "bash '.github/buildomat/jobs/build-linux.sh'" -e 'tracepoint:syscalls:sys_enter_execve {
             printf("PID %d called execve: %s\n", pid, str(args->filename));
           }'
 
