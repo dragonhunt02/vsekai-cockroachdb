@@ -10,8 +10,8 @@ RUN mkdir -p /work
 
 WORKDIR /app/cockroach
 
-#RUN bash .github/buildomat/jobs/build-linux.sh
-RUN curl -OL https://github.com/dragonhunt02/vsekai-cockroachdb/releases/download/cockroach-33/cockroach.tgz
+RUN bash .github/buildomat/jobs/build-linux.sh
+#RUN curl -OL https://github.com/dragonhunt02/vsekai-cockroachdb/releases/download/cockroach-33/cockroach.tgz
 #RUN tree build/deploy
 RUN ls -a .
 #RUN tree -a .
