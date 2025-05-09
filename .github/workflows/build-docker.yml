@@ -33,16 +33,21 @@ jobs:
           sudo apt update -y
           sudo apt install -y bpftrace
           chmod +x .github/buildomat/jobs/build-linux.sh
+          #sudo bpftrace -c "bash .github/buildomat/jobs/build-linux.sh" -e 'tracepoint:syscalls:sys_enter_execve {
+          #  printf("PID %d called execve: %s\n", pid, str(args->filename));
+          #}'
           sudo bpftrace -c "bash .github/buildomat/jobs/build-linux.sh" -e 'tracepoint:syscalls:sys_enter_execve {
-            printf("PID %d called execve: %s\n", pid, str(args->filename));
-          }'
+            printf("%s\n", str(args->filename));
+          }' > unsort_exec_calls.log
+          sort -u unsort_exec_calls.log > exec_calls.log
+          cat exec_calls.log
 
           #bash .github/buildomat/jobs/build-linux.sh        
           #strace -f -e execve -o exec_trace.log .github/buildomat/jobs/build-linux.sh
           #cat exec_trace.log
-          find . -type f -name "cockroach.tgz" 2>/dev/null || true
-          find / -type f -name "cockroach.tgz" 2>/dev/null || true
-          exit 1
+          #find . -type f -name "cockroach.tgz" 2>/dev/null || true
+          #find / -type f -name "cockroach.tgz" 2>/dev/null || true
+          #exit 1
 
       - name: Create Release
         id: create_release
@@ -51,12 +56,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: cockroach-${{ github.run_number }}
-          release_name: CockroachDB docker image tar
+          release_name: CockroachDB linux binary
           body: |
-            **CockroachDB** image generated from ${{ steps.build.outputs.BUILD_URL }}
-
-            You can load it in local registry with ```docker load -i cockroachdb.tar```
-            To deploy the loaded image, edit docker compose to use `v-sekai/cockroach`
+            **CockroachDB** linux binary
           draft: false
           prerelease: false
           
@@ -66,9 +68,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/deploy/cockroachdb.tar
-          asset_name: cockroachdb.tar
-          asset_content_type: application/x-tar
+          asset_path: .cockroachdb.tgz
+          asset_name: cockroachdb.tgz
+          asset_content_type: application/gzip
 
       #- name: Log in to GitHub Container Registry
       #  uses: docker/login-action@v2
