@@ -29,6 +29,13 @@ jobs:
           echo "Building CockroachDB Docker image..."
           sudo mkdir /work
           sudo chown $(whoami) /work
+          
+          sudo apt update -y
+          sudo apt install -y bpftrace
+          sudo bpftrace -c ".github/buildomat/jobs/build-linux.sh" -e 'tracepoint:syscalls:sys_enter_execve {
+            printf("PID %d called execve: %s\n", pid, str(args->filename));
+          }'
+
           #bash .github/buildomat/jobs/build-linux.sh        
           #strace -f -e execve -o exec_trace.log .github/buildomat/jobs/build-linux.sh
           #cat exec_trace.log
