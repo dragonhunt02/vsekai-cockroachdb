@@ -3,7 +3,7 @@ name: Build CockroachDB Docker image
 on:
   push:
     branches:
-      - release-22.1-oxide
+      - master
   workflow_dispatch:  # Trigger on manual dispatch from Actions Tab 
 
 jobs:
@@ -26,26 +26,9 @@ jobs:
           BUILD_URL=https://buildomat.eng.oxide.computer/public/file/oxidecomputer/cockroach/linux-amd64/$GIT_SHA/cockroach.tgz
 
           echo "Building CockroachDB Docker image..."
-          echo "Downloading $BUILD_URL"
-          curl -sS -O $BUILD_URL
-          tar -xvzf cockroach.tgz
-          tree -a cockroach
-
-          cp -v ./cockroach/cockroach build/deploy/cockroach
-          cp -v ./cockroach/lib/* build/deploy/
-          cp -v -r licenses build/deploy/
-
-          cd build/deploy
-          docker buildx build \
-                --load \
-                --platform linux/amd64 \
-                --progress plain \
-                --tag "v-sekai/cockroach" .
-
-          # Export from local registry
-          docker save -o cockroachdb.tar v-sekai/cockroach
-
-          echo "BUILD_URL=$BUILD_URL" >> $GITHUB_OUTPUT
+          mkdir /work
+          bash ./github/build-linux.sh
+          exit 1
 
       - name: Create Release
         id: create_release
