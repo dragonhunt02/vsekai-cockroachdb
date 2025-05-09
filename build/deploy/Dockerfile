@@ -6,6 +6,8 @@ RUN apt-get update -y && \
 
 
 RUN git clone https://github.com/oxidecomputer/cockroach.git
+RUN mkdir -p /work
+
 WORKDIR /app/cockroach
 
 RUN bash .github/buildomat/jobs/build-linux.sh
