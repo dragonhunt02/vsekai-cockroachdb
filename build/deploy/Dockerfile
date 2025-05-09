@@ -2,7 +2,7 @@ FROM debian:bookworm AS builder
 
 WORKDIR /app
 RUN apt-get update -y && \
-  apt-get install -y git tar tree
+  apt-get install -y git tar tree sudo
 
 
 RUN git clone https://github.com/oxidecomputer/cockroach.git
